@@ -2,57 +2,66 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* Apple-style Job Portal Design System - All colors MUST be HSL */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    /* Base Colors */
+    --background: 248 250 252;
+    --foreground: 15 23 42;
+    --muted: 241 245 249;
+    --muted-foreground: 100 116 139;
+    
+    /* Jobs Mode Theme */
+    --jobs-primary: 219 234 254;
+    --jobs-secondary: 37 99 235;
+    --jobs-accent: 59 130 246;
+    --jobs-gradient-start: 219 234 254;
+    --jobs-gradient-end: 191 219 254;
+    
+    /* Training Mode Theme */
+    --training-primary: 254 215 170;
+    --training-secondary: 234 88 12;
+    --training-accent: 249 115 22;
+    --training-gradient-start: 254 215 170;
+    --training-gradient-end: 253 186 116;
+    
+    /* Dynamic System Colors (will change based on mode) */
+    --primary: 37 99 235;
+    --primary-foreground: 248 250 252;
+    --secondary: 219 234 254;
+    --secondary-foreground: 15 23 42;
+    --accent: 59 130 246;
+    --accent-foreground: 248 250 252;
+    --gradient-start: 219 234 254;
+    --gradient-end: 191 219 254;
+    
+    /* Fixed UI Colors */
+    --card: 255 255 255;
+    --card-foreground: 15 23 42;
+    --border: 226 232 240;
+    --input: 226 232 240;
+    --ring: 37 99 235;
+    --destructive: 239 68 68;
+    --destructive-foreground: 248 250 252;
+    
+    /* Layout & Animation */
+    --radius: 12px;
+    --island-radius: 32px;
+    --nav-height: 64px;
+    --spring-duration: 600ms;
+    --micro-duration: 200ms;
+    
+    /* Shadows & Effects */
+    --shadow-soft: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
+    --shadow-medium: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-large: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-island: 0 4px 14px 0 rgb(0 0 0 / 0.15);
+    
+    /* Gradients */
+    --gradient-bg: linear-gradient(135deg, hsl(var(--gradient-start)) 0%, hsl(var(--gradient-end)) 100%);
+    --gradient-hero: linear-gradient(180deg, hsl(var(--background)) 0%, hsl(var(--secondary)) 100%);
+    --gradient-card: linear-gradient(145deg, hsl(var(--card)) 0%, hsl(var(--secondary)) 100%);
   }
 
   .dark {
@@ -100,6 +109,123 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-all duration-500 ease-out;
+  }
+}
+
+/* Apple-style Animation System */
+@layer utilities {
+  /* Mode Transition Classes */
+  .mode-jobs {
+    --primary: var(--jobs-secondary);
+    --secondary: var(--jobs-primary); 
+    --accent: var(--jobs-accent);
+    --gradient-start: var(--jobs-gradient-start);
+    --gradient-end: var(--jobs-gradient-end);
+  }
+  
+  .mode-training {
+    --primary: var(--training-secondary);
+    --secondary: var(--training-primary);
+    --accent: var(--training-accent); 
+    --gradient-start: var(--training-gradient-start);
+    --gradient-end: var(--training-gradient-end);
+  }
+
+  /* Dynamic Island Styles */
+  .dynamic-island {
+    @apply rounded-full bg-card/80 backdrop-blur-xl border border-border/50 
+           shadow-lg transition-all duration-200 
+           hover:scale-105 active:scale-95 cursor-pointer;
+  }
+
+  /* Liquid Hover Animation */
+  .liquid-hover {
+    @apply relative overflow-hidden;
+  }
+  
+  .liquid-hover::before {
+    @apply content-[''] absolute bottom-0 left-0 w-full h-0.5 bg-primary 
+           scale-x-0 origin-left transition-transform duration-300 ease-out;
+  }
+  
+  .liquid-hover:hover::before {
+    @apply scale-x-100;
+  }
+
+  /* Spring Animation */
+  .spring-enter {
+    animation: spring-in 600ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  /* Card Lift Effect */
+  .card-lift {
+    @apply transition-all duration-200 ease-out;
+  }
+  
+  .card-lift:hover {
+    @apply -translate-y-1 shadow-xl;
+  }
+
+  /* Gradient Background */
+  .gradient-bg {
+    background: var(--gradient-bg);
+  }
+
+  /* Pulse Hint Animation */
+  .pulse-hint {
+    animation: pulse-hint 3s ease-in-out infinite;
+  }
+
+  /* Crossfade Animation */
+  .crossfade-enter {
+    animation: crossfade-in 400ms ease-out forwards;
+  }
+  
+  .crossfade-exit {
+    animation: crossfade-out 400ms ease-out forwards;
+  }
+}
+
+/* Keyframe Definitions */
+@keyframes spring-in {
+  0% {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes pulse-hint {
+  0%, 100% {
+    box-shadow: 0 0 0 0 hsl(var(--accent) / 0.3);
+  }
+  50% {
+    box-shadow: 0 0 0 8px hsl(var(--accent) / 0);
+  }
+}
+
+@keyframes crossfade-in {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes crossfade-out {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-10px);
   }
 }
